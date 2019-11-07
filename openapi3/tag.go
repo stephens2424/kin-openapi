@@ -1,5 +1,7 @@
 package openapi3
 
+import "github.com/getkin/kin-openapi/jsoninfo"
+
 // Tags is specified by OpenAPI/Swagger 3.0 standard.
 type Tags []*Tag
 
@@ -17,4 +19,13 @@ type Tag struct {
 	Name         string        `json:"name,omitempty" yaml:"name,omitempty"`
 	Description  string        `json:"description,omitempty" yaml:"description,omitempty"`
 	ExternalDocs *ExternalDocs `json:"externalDocs,omitempty" yaml:"externalDocs,omitempty"`
+	ExtensionProps
+}
+
+func (t *Tag) UnmarshalJSON(data []byte) error {
+	return jsoninfo.UnmarshalStrictStruct(data, t)
+}
+
+func (t *Tag) MarshalJSON() ([]byte, error) {
+	return jsoninfo.MarshalStrictStruct(t)
 }
